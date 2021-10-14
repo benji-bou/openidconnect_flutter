@@ -30,6 +30,15 @@ class OpenIdConnectAndroidiOS {
             child: flutterWebView.WebView(
               javascriptMode: flutterWebView.JavascriptMode.unrestricted,
               initialUrl: authorizationUrl,
+              navigationDelegate: (navigation) {
+                print("navigation next");
+                print(navigation.url);
+                if (navigation.url.startsWith(redirectUrl)) {
+                  Navigator.pop(dialogContext, navigation.url);
+                  return flutterWebView.NavigationDecision.prevent;
+                }
+                return flutterWebView.NavigationDecision.navigate;
+              },
               onPageFinished: (url) {
                 if (url.startsWith(redirectUrl)) {
                   Navigator.pop(dialogContext, url);
