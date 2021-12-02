@@ -25,7 +25,7 @@ dependencies:
 
   # TODO Remove these once native implementations can be added. Refactor so that the native implementations don't need to do the full cycle through.
   webview_flutter: ^2.0.10
-
+  flutter_macos_webview: ^0.0.5
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:

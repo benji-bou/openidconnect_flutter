@@ -15,10 +15,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:retry/retry.dart';
 import 'package:webview_flutter/webview_flutter.dart' as flutterWebView;
+import 'package:flutter_macos_webview/flutter_macos_webview.dart'
+    as macosWebView;
 import 'package:url_launcher/url_launcher.dart';
 
 part './src/openidconnect_client.dart';
 part './src/android_ios.dart';
+part 'src/desktop.dart';
 part './src/helpers.dart';
 
 part './src/models/identity.dart';
@@ -101,15 +104,13 @@ class OpenIdConnect {
       );
     } else if (!kIsWeb) {
       //TODO add other implementations as they become available. For now, all desktop uses device code flow instead of authorization code flow
-      return await OpenIdConnect.authorizeDevice(
-        request: DeviceAuthorizationRequest(
-          audience: null,
-          clientId: request.clientId,
-          clientSecret: request.clientSecret,
-          configuration: request.configuration,
-          scopes: request.scopes,
-          additionalParameters: request.additionalParameters,
-        ),
+      responseUrl = await OpenIdConnectDesktop.authorizeInteractive(
+        context: context,
+        title: title,
+        authorizationUrl: uri.toString(),
+        redirectUrl: request.redirectUrl,
+        popupHeight: request.popupHeight,
+        popupWidth: request.popupWidth,
       );
     } else {
       final storage = FlutterSecureStorage();
